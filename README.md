@@ -4,6 +4,16 @@ A modern, real-time leaderboard app for tracking a sales competition between col
 
 ![Dark mode UI](https://via.placeholder.com/800x400/0f172a/22c55e?text=$10K+Challenge+Leaderboard)
 
+## 🚀 One-Click Deploy
+
+Deploy your own instance in seconds:
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/farouqfahm/10k-challenge-leaderboard)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/farouqfahm/10k-challenge-leaderboard)
+
+Or deploy manually to any platform that supports Node.js (Vercel, Heroku, DigitalOcean, etc.)
+
 ## ✨ Features
 
 ### Core Features

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import db from '../db/database.js';
 import { generateToken } from '../middleware/auth.js';
 
@@ -96,8 +97,7 @@ router.get('/me', (req, res) => {
   }
 
   try {
-    const jwt = await import('jsonwebtoken');
-    const decoded = jwt.default.verify(token, process.env.JWT_SECRET || 'dev-secret-change-in-production');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'dev-secret-change-in-production');
     
     const user = db.prepare(`
       SELECT id, email, name, avatar_color, created_at, last_active

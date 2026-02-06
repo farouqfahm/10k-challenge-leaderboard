@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "$10K in 30 Days Challenge Leaderboard",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "node server/index.js",

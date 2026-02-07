@@ -5,14 +5,12 @@ import { api, formatCurrency } from '../utils/api'
 const QUICK_AMOUNTS = [100, 250, 500, 1000, 2500, 5000]
 
 const DESCRIPTIONS = [
-  'Software license sale',
-  'Consulting package',
-  'Annual subscription',
+  'Software license',
+  'Consulting',
+  'Subscription',
   'Enterprise deal',
   'Support contract',
-  'Training workshop',
-  'Custom integration',
-  'Premium upgrade',
+  'Training',
 ]
 
 export default function AddSale() {
@@ -52,7 +50,7 @@ export default function AddSale() {
       // Redirect after brief celebration
       setTimeout(() => {
         navigate('/')
-      }, 2000)
+      }, 2500)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -62,32 +60,49 @@ export default function AddSale() {
 
   if (success) {
     return (
-      <div className="max-w-lg mx-auto mt-20 text-center">
-        <div className="glass-card bg-gradient-to-br from-primary-500/20 to-dark-900">
-          <div className="text-6xl mb-4 animate-bounce">🎉</div>
-          <h2 className="text-3xl font-bold mb-2">Sale Logged!</h2>
-          <p className="text-4xl font-bold text-primary-400 mb-4">
-            +{formatCurrency(success.amount)}
-          </p>
-          <p className="text-dark-400 mb-4">
-            Total earnings: {formatCurrency(success.totalEarnings)}
-          </p>
+      <div className="max-w-lg mx-auto mt-12 text-center">
+        <div className="glass-card relative overflow-hidden">
+          {/* Celebration effects */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/20 via-transparent to-emerald-500/10" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary-500/20 rounded-full blur-3xl" />
           
-          {success.newAchievements?.length > 0 && (
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mb-4">
-              <p className="text-amber-400 font-medium mb-2">🏆 New Achievement{success.newAchievements.length > 1 ? 's' : ''}!</p>
-              <div className="flex justify-center gap-4">
-                {success.newAchievements.map((badge) => (
-                  <div key={badge.id} className="text-center">
-                    <span className="text-3xl">{badge.emoji}</span>
-                    <p className="text-sm font-medium mt-1">{badge.name}</p>
-                  </div>
-                ))}
-              </div>
+          <div className="relative">
+            <div className="text-7xl mb-6 animate-bounce">🎉</div>
+            <h2 className="text-3xl font-bold mb-3">Sale Logged!</h2>
+            <p className="text-5xl font-bold gradient-text mb-6">
+              +{formatCurrency(success.amount)}
+            </p>
+            
+            <div className="bg-dark-800/50 rounded-xl p-4 mb-6">
+              <p className="text-dark-400 text-sm">Total earnings</p>
+              <p className="text-2xl font-bold text-white">{formatCurrency(success.totalEarnings)}</p>
             </div>
-          )}
+            
+            {success.newAchievements?.length > 0 && (
+              <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-5 mb-6">
+                <p className="text-amber-400 font-semibold mb-3 flex items-center justify-center gap-2">
+                  <span className="text-xl">🏆</span>
+                  New Achievement{success.newAchievements.length > 1 ? 's' : ''}!
+                </p>
+                <div className="flex justify-center gap-6">
+                  {success.newAchievements.map((badge) => (
+                    <div key={badge.id} className="text-center">
+                      <span className="text-4xl block mb-2">{badge.emoji}</span>
+                      <p className="text-sm font-medium text-white">{badge.name}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-          <p className="text-dark-500 text-sm">Redirecting to leaderboard...</p>
+            <div className="flex items-center justify-center gap-2 text-dark-500 text-sm">
+              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              Redirecting to leaderboard...
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -98,39 +113,42 @@ export default function AddSale() {
       {/* Back button */}
       <Link
         to="/"
-        className="inline-flex items-center gap-2 text-dark-400 hover:text-white transition-colors mb-6"
+        className="inline-flex items-center gap-2 text-dark-400 hover:text-white transition-colors mb-8 group"
       >
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
         Back to Leaderboard
       </Link>
 
       <div className="glass-card">
-        <h1 className="text-2xl font-bold mb-6 flex items-center gap-3">
+        <h1 className="text-2xl font-bold mb-8 flex items-center gap-3">
           <span className="text-3xl">💰</span>
           Log a Sale
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-8">
           {error && (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-red-400 text-sm">
+            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-red-400 text-sm flex items-start gap-3">
+              <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
               {error}
             </div>
           )}
 
           {/* Amount input */}
           <div>
-            <label className="block text-sm font-medium mb-2 text-dark-300">
+            <label className="block text-sm font-semibold mb-3 text-dark-300">
               Sale Amount
             </label>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-dark-500 text-xl font-bold">$</span>
+              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-dark-400 text-2xl font-bold">$</span>
               <input
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="input w-full pl-10 text-2xl font-bold"
+                className="input w-full pl-12 text-3xl font-bold h-16"
                 placeholder="0"
                 min="1"
                 step="0.01"
@@ -140,16 +158,16 @@ export default function AddSale() {
             </div>
 
             {/* Quick amounts */}
-            <div className="flex flex-wrap gap-2 mt-3">
+            <div className="flex flex-wrap gap-2 mt-4">
               {QUICK_AMOUNTS.map((quickAmount) => (
                 <button
                   key={quickAmount}
                   type="button"
                   onClick={() => setAmount(quickAmount.toString())}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
                     amount === quickAmount.toString()
-                      ? 'bg-primary-500 text-white'
-                      : 'bg-dark-800 text-dark-300 hover:bg-dark-700'
+                      ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/25'
+                      : 'bg-dark-800/60 text-dark-300 hover:bg-dark-700 hover:text-white'
                   }`}
                 >
                   {formatCurrency(quickAmount)}
@@ -160,8 +178,8 @@ export default function AddSale() {
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium mb-2 text-dark-300">
-              Description (optional)
+            <label className="block text-sm font-semibold mb-3 text-dark-300">
+              Description <span className="text-dark-500 font-normal">(optional)</span>
             </label>
             <input
               type="text"
@@ -173,16 +191,16 @@ export default function AddSale() {
             />
 
             {/* Quick descriptions */}
-            <div className="flex flex-wrap gap-2 mt-3">
-              {DESCRIPTIONS.slice(0, 4).map((desc) => (
+            <div className="flex flex-wrap gap-2 mt-4">
+              {DESCRIPTIONS.map((desc) => (
                 <button
                   key={desc}
                   type="button"
                   onClick={() => setDescription(desc)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
                     description === desc
                       ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30'
-                      : 'bg-dark-800 text-dark-400 hover:bg-dark-700'
+                      : 'bg-dark-800/60 text-dark-400 hover:bg-dark-700 hover:text-dark-300'
                   }`}
                 >
                   {desc}
@@ -198,7 +216,7 @@ export default function AddSale() {
             className="btn-primary w-full text-lg py-4"
           >
             {loading ? (
-              <span className="flex items-center justify-center gap-2">
+              <span className="flex items-center justify-center gap-3">
                 <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
@@ -206,25 +224,38 @@ export default function AddSale() {
                 Logging...
               </span>
             ) : (
-              <>
-                Log {amount ? formatCurrency(parseFloat(amount)) : ''} Sale 🚀
-              </>
+              <span className="flex items-center justify-center gap-2">
+                Log {amount ? formatCurrency(parseFloat(amount)) : ''} Sale
+                <span className="text-xl">🚀</span>
+              </span>
             )}
           </button>
         </form>
       </div>
 
       {/* Tips */}
-      <div className="glass-card mt-6 bg-gradient-to-br from-blue-500/10 to-dark-900 border-blue-500/20">
-        <h3 className="font-medium mb-2 flex items-center gap-2">
-          <span>💡</span>
-          Pro Tips
-        </h3>
-        <ul className="text-sm text-dark-400 space-y-1">
-          <li>• Log sales as you close them to maintain your streak</li>
-          <li>• Every sale counts — small wins add up!</li>
-          <li>• Close a $1K+ deal to earn the "Whale Hunter" badge 🐳</li>
-        </ul>
+      <div className="glass-card mt-8 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl" />
+        <div className="relative">
+          <h3 className="font-semibold mb-3 flex items-center gap-2">
+            <span className="text-xl">💡</span>
+            Pro Tips
+          </h3>
+          <ul className="text-sm text-dark-400 space-y-2">
+            <li className="flex items-start gap-2">
+              <span className="text-primary-500 mt-1">•</span>
+              Log sales as you close them to maintain your streak
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary-500 mt-1">•</span>
+              Every sale counts — small wins add up fast!
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary-500 mt-1">•</span>
+              Close a $1K+ deal to earn the "Whale Hunter" badge 🐳
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   )

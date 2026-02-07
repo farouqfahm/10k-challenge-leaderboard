@@ -2,11 +2,11 @@ import { useState, useEffect, useCallback } from 'react'
 import { api, timeAgo, formatCurrency } from '../utils/api'
 import { useWebSocketEvent } from '../context/WebSocketContext'
 
-const TYPE_ICONS = {
-  sale: '💰',
-  joined: '🚀',
-  achievement: '🏆',
-  message: '💬',
+const TYPE_CONFIG = {
+  sale: { icon: '💰', color: 'text-primary-400' },
+  joined: { icon: '🚀', color: 'text-blue-400' },
+  achievement: { icon: '🏆', color: 'text-amber-400' },
+  message: { icon: '💬', color: 'text-purple-400' },
 }
 
 export default function ActivityFeed() {
@@ -33,7 +33,7 @@ export default function ActivityFeed() {
     const newItem = {
       id: Date.now(),
       type: 'sale',
-      message: `${payload.userName} closed a ${formatCurrency(payload.amount)} deal! 💰`,
+      message: `${payload.userName} closed a ${formatCurrency(payload.amount)} deal!`,
       amount: payload.amount,
       created_at: payload.timestamp,
       user_id: payload.userId,
@@ -64,7 +64,7 @@ export default function ActivityFeed() {
       <div className="glass-card animate-pulse">
         <div className="h-6 bg-dark-800 rounded w-32 mb-4"></div>
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="h-12 bg-dark-800 rounded mb-2"></div>
+          <div key={i} className="h-14 bg-dark-800/50 rounded-xl mb-2"></div>
         ))}
       </div>
     )
@@ -72,32 +72,49 @@ export default function ActivityFeed() {
 
   return (
     <div className="glass-card">
-      <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        <span>⚡</span>
-        Live Activity
+      <h2 className="text-lg font-semibold mb-5 flex items-center gap-3">
+        <span className="text-2xl">⚡</span>
+        <span>Live Activity</span>
+        <div className="flex-1" />
+        <div className="flex items-center gap-2 text-xs text-dark-500">
+          <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse" />
+          Real-time
+        </div>
       </h2>
       
-      <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+      <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
         {feed.length === 0 ? (
-          <p className="text-dark-500 text-center py-8">No activity yet. Be the first!</p>
+          <div className="text-center py-12">
+            <div className="text-4xl mb-3 opacity-50">🦗</div>
+            <p className="text-dark-500">No activity yet</p>
+            <p className="text-dark-600 text-sm mt-1">Be the first to log a sale!</p>
+          </div>
         ) : (
-          feed.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-start gap-3 p-3 rounded-xl bg-dark-800/50 hover:bg-dark-800 transition-colors"
-            >
-              <span className="text-xl">{TYPE_ICONS[item.type] || '📢'}</span>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-dark-200 break-words">{item.message}</p>
-                <p className="text-xs text-dark-500 mt-1">{timeAgo(item.created_at)}</p>
-              </div>
-              {item.amount && (
-                <span className="text-primary-400 font-semibold text-sm">
-                  +{formatCurrency(item.amount)}
+          feed.map((item, index) => {
+            const config = TYPE_CONFIG[item.type] || TYPE_CONFIG.sale
+            return (
+              <div
+                key={item.id}
+                className="flex items-start gap-3 p-3.5 rounded-xl bg-dark-800/30 hover:bg-dark-800/60 transition-all duration-200 group"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <span className="text-lg flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
+                  {config.icon}
                 </span>
-              )}
-            </div>
-          ))
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-dark-200 break-words leading-relaxed">
+                    {item.message}
+                  </p>
+                  <p className="text-xs text-dark-500 mt-1.5">{timeAgo(item.created_at)}</p>
+                </div>
+                {item.amount && (
+                  <span className={`${config.color} font-semibold text-sm flex-shrink-0`}>
+                    +{formatCurrency(item.amount)}
+                  </span>
+                )}
+              </div>
+            )
+          })
         )}
       </div>
     </div>

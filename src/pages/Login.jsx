@@ -26,35 +26,40 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-4xl font-bold shadow-xl shadow-primary-500/30 mb-4">
-            $
-          </div>
-          <h1 className="text-3xl font-bold">Welcome Back!</h1>
-          <p className="text-dark-400 mt-2">Ready to crush those numbers? 💪</p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center px-4 bg-grid">
+      {/* Ambient effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-20 w-72 h-72 bg-primary-500/20 rounded-full blur-3xl animate-float" />
+        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-float-delayed" />
+      </div>
 
-        {/* Demo credentials */}
-        <div className="glass-card bg-primary-500/10 border-primary-500/20 mb-6 text-sm">
-          <p className="font-medium mb-2">🎮 Demo Accounts:</p>
-          <p className="text-dark-400">Email: alex@company.com (or jordan, sam, taylor, casey)</p>
-          <p className="text-dark-400">Password: demo123</p>
+      <div className="relative w-full max-w-md">
+        {/* Logo */}
+        <div className="text-center mb-10">
+          <div className="relative inline-block mb-6">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-400 via-primary-500 to-emerald-500 flex items-center justify-center text-4xl font-bold shadow-2xl shadow-primary-500/30">
+              <span className="drop-shadow-lg">$</span>
+            </div>
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary-400 to-emerald-500 blur-2xl opacity-40" />
+          </div>
+          <h1 className="text-4xl font-bold tracking-tight mb-2">Welcome Back</h1>
+          <p className="text-dark-400 text-lg">Ready to crush those numbers? 💪</p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="glass-card space-y-4">
+        <form onSubmit={handleSubmit} className="glass-card space-y-5">
           {error && (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-red-400 text-sm">
+            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-red-400 text-sm flex items-start gap-3">
+              <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-2 text-dark-300">
-              Email
+            <label htmlFor="email" className="block text-sm font-semibold mb-2.5 text-dark-300">
+              Email Address
             </label>
             <input
               id="email"
@@ -69,7 +74,7 @@ export default function Login() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium mb-2 text-dark-300">
+            <label htmlFor="password" className="block text-sm font-semibold mb-2.5 text-dark-300">
               Password
             </label>
             <input
@@ -86,7 +91,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary w-full"
+            className="btn-primary w-full mt-2"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -100,14 +105,14 @@ export default function Login() {
               'Sign In'
             )}
           </button>
-
-          <p className="text-center text-dark-400 text-sm">
-            Don't have an account?{' '}
-            <Link to="/signup" className="text-primary-400 hover:text-primary-300 font-medium">
-              Join the Challenge
-            </Link>
-          </p>
         </form>
+
+        <p className="text-center text-dark-400 text-sm mt-6">
+          Don't have an account?{' '}
+          <Link to="/signup" className="text-primary-400 hover:text-primary-300 font-semibold transition-colors">
+            Join the Challenge →
+          </Link>
+        </p>
       </div>
     </div>
   )

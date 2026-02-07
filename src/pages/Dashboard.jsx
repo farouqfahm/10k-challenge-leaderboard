@@ -5,7 +5,6 @@ import { useWebSocketEvent } from '../context/WebSocketContext'
 import LeaderboardCard from '../components/LeaderboardCard'
 import CountdownTimer from '../components/CountdownTimer'
 import ActivityFeed from '../components/ActivityFeed'
-import TrashTalk from '../components/TrashTalk'
 import MotivationalQuote from '../components/MotivationalQuote'
 import StatsCard from '../components/StatsCard'
 
@@ -60,17 +59,22 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="space-y-6 animate-pulse">
-        <div className="h-32 bg-dark-900 rounded-2xl"></div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="space-y-8 animate-pulse">
+        <div className="h-48 bg-dark-900/50 rounded-3xl"></div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-32 bg-dark-900/50 rounded-2xl"></div>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-24 bg-dark-900 rounded-2xl"></div>
+              <div key={i} className="h-24 bg-dark-900/50 rounded-2xl"></div>
             ))}
           </div>
-          <div className="space-y-4">
-            <div className="h-48 bg-dark-900 rounded-2xl"></div>
-            <div className="h-48 bg-dark-900 rounded-2xl"></div>
+          <div className="space-y-6">
+            <div className="h-48 bg-dark-900/50 rounded-2xl"></div>
+            <div className="h-64 bg-dark-900/50 rounded-2xl"></div>
           </div>
         </div>
       </div>
@@ -78,26 +82,36 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Hero section with countdown */}
-      <div className="glass-card bg-gradient-to-br from-primary-500/10 via-dark-900 to-purple-500/10">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-2">
-            🔥 $10K in 30 Days Challenge 🔥
-          </h2>
-          <p className="text-dark-400">Time remaining to crush it</p>
+      <div className="relative glass-card overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary-500/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-purple-500/10 to-transparent rounded-full blur-3xl" />
+        
+        <div className="relative">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-400 text-sm font-medium mb-4">
+              <span className="w-2 h-2 rounded-full bg-primary-400 animate-pulse" />
+              Challenge Active
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-3">
+              <span className="gradient-text">$10K</span> in 30 Days
+            </h2>
+            <p className="text-dark-400 text-lg">Time remaining to crush your goals</p>
+          </div>
+          <CountdownTimer endDate={challenge?.end_date || '2026-03-02'} />
         </div>
-        <CountdownTimer endDate={challenge?.end_date || '2024-03-02'} />
       </div>
 
       {/* Your stats summary */}
       {currentUserStats && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatsCard
             icon="🏆"
             label="Your Rank"
             value={`#${currentUserStats.rank}`}
-            subValue={`of ${leaderboard.length} challengers`}
+            subValue={`of ${leaderboard.length} challenger${leaderboard.length !== 1 ? 's' : ''}`}
             color="amber"
           />
           <StatsCard
@@ -106,12 +120,13 @@ export default function Dashboard() {
             value={formatCurrency(currentUserStats.total_earnings)}
             subValue={`${Math.round(currentUserStats.progress_percent)}% to goal`}
             color="primary"
+            highlight={currentUserStats.progress_percent >= 50}
           />
           <StatsCard
             icon="📊"
-            label="Your Deals"
+            label="Deals Closed"
             value={currentUserStats.total_deals}
-            subValue={`${currentUserStats.days_active} days active`}
+            subValue={`${currentUserStats.days_active} day${currentUserStats.days_active !== 1 ? 's' : ''} active`}
             color="blue"
           />
           <StatsCard
@@ -119,40 +134,56 @@ export default function Dashboard() {
             label="To Goal"
             value={formatCurrency(Math.max(0, (challenge?.goal || 10000) - currentUserStats.total_earnings))}
             subValue={currentUserStats.progress_percent >= 100 ? '🎉 CRUSHED IT!' : 'remaining'}
-            color={currentUserStats.progress_percent >= 100 ? 'amber' : 'purple'}
+            color={currentUserStats.progress_percent >= 100 ? 'gold' : 'purple'}
+            highlight={currentUserStats.progress_percent >= 100}
           />
         </div>
       )}
 
       {/* Main content grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Leaderboard */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-5">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold flex items-center gap-2">
-              <span>🏅</span> Leaderboard
+            <h2 className="text-2xl font-bold flex items-center gap-3">
+              <span className="text-3xl">🏅</span> 
+              <span>Leaderboard</span>
             </h2>
-            <div className="text-sm text-dark-400">
-              {leaderboard.length} challengers · {formatCurrency(totalEarnings)} total · {totalDeals} deals
+            <div className="flex items-center gap-4 text-sm">
+              <span className="text-dark-400">
+                <span className="text-white font-semibold">{leaderboard.length}</span> challenger{leaderboard.length !== 1 ? 's' : ''}
+              </span>
+              <span className="w-1 h-1 rounded-full bg-dark-600" />
+              <span className="text-dark-400">
+                <span className="text-primary-400 font-semibold">{formatCurrency(totalEarnings)}</span> total
+              </span>
             </div>
           </div>
           
-          <div className="space-y-3">
-            {leaderboard.map((player) => (
-              <LeaderboardCard
-                key={player.id}
-                user={player}
-                isCurrentUser={player.id === user?.id}
-              />
-            ))}
-          </div>
+          {leaderboard.length === 0 ? (
+            <div className="glass-card text-center py-16">
+              <div className="text-6xl mb-4">🚀</div>
+              <h3 className="text-xl font-bold mb-2">No challengers yet!</h3>
+              <p className="text-dark-400">Be the first to join and start logging sales.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {leaderboard.map((player, index) => (
+                <LeaderboardCard
+                  key={player.id}
+                  user={player}
+                  isCurrentUser={player.id === user?.id}
+                  animationDelay={index * 50}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
           <MotivationalQuote />
           <ActivityFeed />
-          <TrashTalk />
         </div>
       </div>
     </div>
